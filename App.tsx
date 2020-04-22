@@ -13,7 +13,7 @@ export default function App() {
       </View>
       <UserInfo />
       <View style={styles.contactTracingBtn}>
-        <Button color='white' title="START CONTACT TRACING" />
+        <Button title="START CONTACT TRACING" />
       </View>
     </View>
   );
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom:70,
     height: 50,
-    backgroundColor: '#0E6EB8',
     borderRadius: 4,
     width: WIDTH - 50,
     justifyContent:'center'

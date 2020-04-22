@@ -48,7 +48,7 @@ export default function Form() {
         />
         {errors.lastName && <Text style={styles.error}>This is required.</Text>}
 
-        <Text style={styles.label}>Id Number</Text>
+        <Text style={styles.label}>Health ID</Text>
         <Controller
             as={TextInput}
             style={styles.input}
@@ -59,7 +59,7 @@ export default function Form() {
         />
 
             <View style={styles.button}>
-                <Button color="white" title="SAVE" onPress={handleSubmit(onSubmit)} />
+                <Button title="SAVE" onPress={handleSubmit(onSubmit)} />
             </View>
         </View>
       </TouchableWithoutFeedback>
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 40,
     height: 40,
-    backgroundColor: '#0E6EB8',
     borderRadius: 4,
   },
   input: {
