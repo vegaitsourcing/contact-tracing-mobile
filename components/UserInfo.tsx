@@ -11,33 +11,43 @@ export default function UserInfo() {
 
   useEffect(() => {
     getUserData().then(
-      
       data => {console.log('ENTER USER DATA GET'); setUserData(data)}
     )
 }, []) 
   
   return (
     <View style={styles.container}>
-      <Text>First Name</Text>
-      {userData && <Text>{userData.firstName}</Text>}
-      <View style={styles.hrLine} />
-      <Text>Last Name</Text>
-      {userData && <Text>{userData.lastName}</Text>}
-      <View style={styles.hrLine} />
-      <Text>Health ID</Text>
-      {userData && <Text>{userData.healthId}</Text>}
-      <View style={styles.hrLine} />
+      <Text style={styles.infoLabel}>First Name</Text>
+      {userData && <Text style={styles.info}>{userData.firstName}</Text>}
+      <Text style={styles.infoLabel}>Last Name</Text>
+      {userData && <Text style={styles.info}>{userData.lastName}</Text>}
+      <Text style={styles.infoLabel}>Health ID</Text>
+      {userData && <Text style={styles.info}>{userData.healthId}</Text>}
+      <Text style={styles.infoLabel}>Status</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-around',
+    flex:2,
+    justifyContent: 'center',
     width : WIDTH - 50,
   },
-  hrLine: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+infoLabel : {
+    fontSize:18,
+    backgroundColor:'#0E6EB8',
+    color:'white',
+    height:40,
+    padding:10,
+    justifyContent:'center'
+},
+info: {
+    padding:10,
+    fontSize:16,
+},
+status: {
+    flexDirection:'row',
+    justifyContent:'space-between'
 }
 });
