@@ -8,6 +8,7 @@ const { width: WIDTH } = Dimensions.get('window')
 
 export default function App() {
   const [userSaved, setUserSaved] = useState(false)
+  const [updateMode, setUpdateMode] = useState(false)
 
   useEffect(() => {
     getUserData().then(
@@ -17,10 +18,6 @@ export default function App() {
     })
   }, [])
 
-  const updateUserSaved = (value: boolean) => {
-    setUserSaved(value)
-  }
-
   const startContactTracing = () => {
     console.log('start');
     removeUserData().then(
@@ -29,23 +26,31 @@ export default function App() {
       })
   }
 
+  const saveFromData = () => {
+    setUserSaved(true);
+    setUpdateMode(false)
+  }
+
+  console.log(userSaved)
+  console.log(updateMode)
+
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}
+      behavior="padding"
+      style={{flex:1, marginTop:80}}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.logo}>
             <Image source={require('./assets/logo.jpg')} />
           </View>
-          {userSaved ? [
-            <UserInfo />,
+          {userSaved && !updateMode ? [
+            <UserInfo setUpdateMode={setUpdateMode} />,
             <View style={styles.contactTracingBtn}>
               <Button title="START CONTACT TRACING" onPress={() => startContactTracing()} />
             </View>]
             :
-            <Form onSaveData={setUserSaved} />
+            <Form onSaveData={saveFromData} updateMode={updateMode}/>
           }
         </View>
       </TouchableWithoutFeedback>
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    top: 100,
+    top: 0,
     flex: 1,
   },
   contactTracingBtn: {
@@ -72,6 +77,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 4,
     width: WIDTH - 50,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth:1,
+    borderColor:"#0E6EB8"
   }
 });

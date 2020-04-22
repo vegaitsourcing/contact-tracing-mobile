@@ -1,19 +1,32 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Text, View, TextInput, Button, Alert, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native"
 import { useForm, Controller } from 'react-hook-form'
 import FormData from '../types/models/formData'
-import { saveUserData } from "../services/userDataStorageService"
+import { saveUserData, getUserData } from "../services/userDataStorageService"
 
 
 const { width: WIDTH } = Dimensions.get('window')
 
 const Form = (props: any) => {
-    const { control, handleSubmit, errors } = useForm<FormData>();
+    const { control, handleSubmit, errors, setValue  } = useForm<FormData>();
+
+   useEffect(() => {
+       if(props.updateMode) {
+        getUserData().then(
+            data => {
+                setValue('firstName',data.firstName ? data.firstName : "");
+                setValue('lastName',data.lastName ? data.lastName : "");
+                setValue('healthId',data.healthId ? data.healthId : "");
+            }
+          )
+       }
+  }, [])
+
     const onSubmit = (data: any) => {
         console.log("ON SUBMIT")
         saveUserData(data)
-            .then((data) => props.onSaveData(true))
-            .catch((err) => console.log("Error saving data"))
+            .then((data) =>props.onSaveData(true)
+            ).catch((err) => console.log("Error saving data"))
     }
 
     return (
@@ -26,7 +39,7 @@ const Form = (props: any) => {
                 name="firstName"
                 onChange={args => args[0].nativeEvent.text}
                 rules={{ required: true }}
-                defaultValue=""
+                defaultValue={""}
             />
             {errors.firstName && <Text style={styles.error}>This is required.</Text>}
 
@@ -38,7 +51,7 @@ const Form = (props: any) => {
                 name="lastName"
                 onChange={args => args[0].nativeEvent.text}
                 rules={{ required: true }}
-                defaultValue=""
+                defaultValue={""}
             />
             {errors.lastName && <Text style={styles.error}>This is required.</Text>}
 
@@ -49,7 +62,7 @@ const Form = (props: any) => {
                 control={control}
                 name="healthId"
                 onChange={args => args[0].nativeEvent.text}
-                defaultValue=""
+                defaultValue={""}
             />
 
             <View style={styles.button}>
@@ -60,9 +73,6 @@ const Form = (props: any) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
     label: {
         color: 'black',
         marginTop: 10,
@@ -70,14 +80,16 @@ const styles = StyleSheet.create({
         marginLeft: 0,
     },
     inner: {
-        padding: 24,
         flex: 1,
-        justifyContent: 'center'
+        marginTop:50,
+        justifyContent: 'center',
     },
     button: {
         marginTop: 40,
         height: 40,
         borderRadius: 4,
+        borderWidth:1,
+        borderColor:"#0E6EB8"
     },
     input: {
         height: 40,
