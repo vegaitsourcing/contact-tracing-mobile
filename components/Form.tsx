@@ -1,21 +1,20 @@
 import React from "react"
 import { Text, View, TextInput, Button, Alert, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native"
 import { useForm, Controller  } from 'react-hook-form'
+import FormData from '../types/models/formData'
+import { saveUserData } from "../services/userDataStorageService"
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  healthId: string;
-};
 
 const {width:WIDTH} = Dimensions.get('window')
 
 export default function Form() {
   const { control, handleSubmit, errors } = useForm<FormData>();
-  const onSubmit = (data: any) => Alert.alert(
-    "Form Data",
-    JSON.stringify(data),
-  );
+  const onSubmit = (data: any) =>  {
+    console.log("ON SUBMIT")
+    saveUserData(data)
+      .then((data) => console.log("Saved data"))
+      .catch((err) => console.log("Error saving data"))
+  }
 
   return (
     <KeyboardAvoidingView
