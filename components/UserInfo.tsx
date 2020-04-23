@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { getUserData } from '../services/userDataStorageService';
-import FormData from '../types/models/formData'
+import FormData from '../types/models/formData';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons'
+
+
 
 const { width: WIDTH } = Dimensions.get('window')
 
-const UserInfo = (props:any) => {
+const UserInfo = (props: any) => {
 
   const [userData, setUserData] = useState<FormData | null>(null)
 
@@ -19,27 +23,25 @@ const UserInfo = (props:any) => {
     console.log('positive')
   }
 
-  const updateMode= () => {
-    props.setUpdateMode(true)
-  }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.infoLabel}>First Name</Text>
+      <Text style={styles.infoLabel}>FIRST NAME</Text>
       {userData && <Text style={styles.info}>{userData.firstName}</Text>}
-      <Text style={styles.infoLabel}>Last Name</Text>
+      <Text style={styles.infoLabel}>LAST NAME</Text>
       {userData && <Text style={styles.info}>{userData.lastName}</Text>}
-      <Text style={styles.infoLabel}>Health ID</Text>
+      <Text style={styles.infoLabel}>HEALTH ID</Text>
       {userData && <Text style={styles.info}>{userData.healthId}</Text>}
       <View>
-        <Text style={styles.infoLabel}>Status</Text>
+        <Text style={styles.infoLabel}>STATUS</Text>
         <View style={styles.status}>
-          <Text style={styles.info}>Negative</Text>
-          <Button title="SUBMIT POSITIVE" onPress={() => submitPositiveResults()} />
+          <Text style={styles.infoStatus}>Negative</Text>
+          <TouchableOpacity onPress={() => submitPositiveResults()}>
+            <View style={styles.submitPositive}>
+              <Text style={styles.submitPositiveText}>SUBMIT POSITIVE</Text>
+              <FontAwesomeIcon color="#66b2ff" icon={faUpload} />
+            </View>
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.updateBtn}>
-        <Button title="UPDATE INFO" onPress={() => updateMode()} />
       </View>
     </View>
   );
@@ -47,31 +49,46 @@ const UserInfo = (props:any) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
-    marginTop: 170,
-    justifyContent: 'flex-start',
     width: WIDTH - 50,
+    borderColor: "#0E6EB8",
+    borderWidth: 1,
+    marginTop: 10
   },
   infoLabel: {
     fontSize: 18,
     backgroundColor: '#0E6EB8',
     color: 'white',
-    height: 30,
-    padding: 4,
-    justifyContent: 'center'
+    height: 50,
+    padding: 13,
+    textAlign: "center"
   },
   info: {
-    padding: 10,
-    fontSize: 16,
+    padding: 15,
+    fontSize: 18,
+    textAlign: 'center',
+    fontStyle: 'italic'
+  },
+  infoStatus: {
+    padding: 15,
+    fontSize: 18,
+    textAlign: 'center',
   },
   status: {
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  updateBtn: {
-    marginTop:40,
-    borderWidth:1,
-    borderColor:"#0E6EB8"
+  submitPositive: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginRight: 5,
+  },
+  submitPositiveText: {
+    fontSize: 16,
+    color: '#66b2ff',
+    fontWeight: 'bold',
+    marginRight: 5
   }
 });
 

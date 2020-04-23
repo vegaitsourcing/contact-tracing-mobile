@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
@@ -26,31 +26,48 @@ export default function App() {
       })
   }
 
-  const saveFromData = () => {
-    setUserSaved(true);
+  const saveFromData = (value: boolean) => {
+    if (value) {
+      setUserSaved(true);
+    }
     setUpdateMode(false)
   }
 
-  console.log(userSaved)
-  console.log(updateMode)
+  const onModeChange = () => {
+    setUpdateMode(true)
+  }
 
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      style={{flex:1, marginTop:80}}
+      style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <View style={styles.logo}>
+          <View style={styles.innerLogo}>
             <Image source={require('./assets/logo.jpg')} />
           </View>
-          {userSaved && !updateMode ? [
-            <UserInfo setUpdateMode={setUpdateMode} />,
-            <View style={styles.contactTracingBtn}>
-              <Button title="START CONTACT TRACING" onPress={() => startContactTracing()} />
-            </View>]
-            :
-            <Form onSaveData={saveFromData} updateMode={updateMode}/>
+          <View style={styles.innderCont}>
+            {userSaved && !updateMode ? [
+              <UserInfo setUpdateMode={setUpdateMode} />,
+              <TouchableOpacity onPress={() => onModeChange()}>
+                <View style={styles.updateBtn}>
+                  <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
+                </View>
+              </TouchableOpacity>
+            ]
+              :
+              <Form onSaveData={saveFromData} updateMode={updateMode} />
+            }
+          </View>
+          {userSaved && !updateMode &&
+            <View style={styles.innderBtn}>
+              <TouchableOpacity onPress={() => startContactTracing()}>
+                <View style={styles.trackingBtn}>
+                  <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           }
         </View>
       </TouchableWithoutFeedback>
@@ -60,25 +77,43 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  innerLogo: {
     flex: 1,
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  innderCont: {
+    flex: 4,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginTop: 50,
+  },
+  innderBtn: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  updateBtn: {
+    borderWidth: 1,
+    borderColor: '#0E6EB8',
+    borderRadius: 50,
+    height: 50,
+    width: WIDTH - 50,
+    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
-    position: 'absolute',
-    top: 0,
-    flex: 1,
-  },
-  contactTracingBtn: {
-    flex: 2,
-    position: 'absolute',
-    bottom: 70,
+  trackingBtn: {
+    backgroundColor: "#0E6EB8",
+    borderWidth: 1,
+    borderColor: '#0E6EB8',
+    borderRadius: 50,
     height: 50,
-    borderRadius: 4,
     width: WIDTH - 50,
+    marginTop: 20,
+    alignItems: 'center',
     justifyContent: 'center',
-    borderWidth:1,
-    borderColor:"#0E6EB8"
   }
 });
