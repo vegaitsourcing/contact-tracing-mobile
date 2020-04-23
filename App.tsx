@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
+import SubmitPositive from './components/SubmitPositive';
 
 const { width: WIDTH } = Dimensions.get('window')
 
 export default function App() {
   const [userSaved, setUserSaved] = useState(false)
   const [updateMode, setUpdateMode] = useState(false)
+  const [submitMode, setSubmitMode] = useState(false)
 
   useEffect(() => {
     getUserData().then(
@@ -37,6 +39,44 @@ export default function App() {
     setUpdateMode(true)
   }
 
+  function renderContainer() {
+    return (
+      <Fragment>
+        {userSaved && !updateMode && !submitMode && [
+          <UserInfo setUpdateMode={setUpdateMode} setSubmitMode={setSubmitMode} />,
+          <TouchableOpacity onPress={() => onModeChange()}>
+            <View style={styles.updateBtn}>
+              <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
+            </View>
+          </TouchableOpacity>
+        ]
+        }
+        {(!userSaved || updateMode) && !submitMode &&
+          <Form onSaveData={saveFromData} updateMode={updateMode} />
+        }
+        {userSaved && submitMode && !updateMode &&
+          <SubmitPositive setSubmitMode={setSubmitMode} />
+        }
+      </Fragment>
+    )
+  }
+
+  function renderBtn() {
+    return (
+      <Fragment>
+      {userSaved && !updateMode && !submitMode &&
+        <View style={styles.innderBtn}>
+          <TouchableOpacity onPress={() => startContactTracing()}>
+            <View style={styles.trackingBtn}>
+              <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      }
+      </Fragment>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -48,27 +88,9 @@ export default function App() {
             <Image source={require('./assets/logo.jpg')} />
           </View>
           <View style={styles.innderCont}>
-            {userSaved && !updateMode ? [
-              <UserInfo setUpdateMode={setUpdateMode} />,
-              <TouchableOpacity onPress={() => onModeChange()}>
-                <View style={styles.updateBtn}>
-                  <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
-                </View>
-              </TouchableOpacity>
-            ]
-              :
-              <Form onSaveData={saveFromData} updateMode={updateMode} />
-            }
+            {renderContainer()}
           </View>
-          {userSaved && !updateMode &&
-            <View style={styles.innderBtn}>
-              <TouchableOpacity onPress={() => startContactTracing()}>
-                <View style={styles.trackingBtn}>
-                  <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          }
+            {renderBtn()}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
