@@ -6,6 +6,8 @@ import { getUserData, removeUserData, saveUserData } from './services/userDataSt
 import SubmitPositive from './components/SubmitPositive';
 import {registerForPushNotificationsAsync} from './services/registerForPushNotificationsAsync'
 import { Notifications } from 'expo';
+import { demoCrypto } from './services/cryptoService';
+
 const { width: WIDTH } = Dimensions.get('window')
 
 export default function App() {
@@ -15,6 +17,7 @@ export default function App() {
 
 
   useEffect(() => {
+    demoCrypto()
     registerForPushNotificationsAsync()
     const notificationSubscription = Notifications.addListener(_handleNotification);
     getUserData().then(
@@ -52,20 +55,20 @@ export default function App() {
   }
 
   function renderContainer() {
-    return (
+  return (
       <Fragment>
         {userSaved && !updateMode && !submitMode && [
           <UserInfo setUpdateMode={setUpdateMode} setSubmitMode={setSubmitMode} />,
-          <TouchableOpacity onPress={() => onModeChange()}>
-            <View style={styles.updateBtn}>
-              <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
-            </View>
-          </TouchableOpacity>
-        ]
+              <TouchableOpacity onPress={() => onModeChange()}>
+                <View style={styles.updateBtn}>
+                  <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
+                </View>
+              </TouchableOpacity>
+            ]
         }
         {(!userSaved || updateMode) && !submitMode &&
-          <Form onSaveData={saveFromData} updateMode={updateMode} />
-        }
+              <Form onSaveData={saveFromData} updateMode={updateMode} />
+            }
         {userSaved && submitMode && !updateMode &&
           <SubmitPositive setSubmitMode={setSubmitMode} />
         }
@@ -77,14 +80,14 @@ export default function App() {
     return (
       <Fragment>
       {userSaved && !updateMode && !submitMode &&
-        <View style={styles.innderBtn}>
-          <TouchableOpacity onPress={() => startContactTracing()}>
-            <View style={styles.trackingBtn}>
-              <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
+            <View style={styles.innderBtn}>
+              <TouchableOpacity onPress={() => startContactTracing()}>
+                <View style={styles.trackingBtn}>
+                  <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
-      }
+          }
       </Fragment>
     );
   }
@@ -98,7 +101,7 @@ export default function App() {
         <View style={styles.container}>
           <View style={styles.innerLogo}>
             <Image source={require('./assets/logo.jpg')} />
-          </View>
+        </View>
           <View style={styles.innderCont}>
             {renderContainer()}
           </View>
