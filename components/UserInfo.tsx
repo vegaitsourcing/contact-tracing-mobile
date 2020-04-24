@@ -20,7 +20,7 @@ const UserInfo = (props: any) => {
   }, [])
 
   const submitPositiveResults = () => {
-    console.log('positive')
+    props.setSubmitMode(true)
   }
 
   return (
