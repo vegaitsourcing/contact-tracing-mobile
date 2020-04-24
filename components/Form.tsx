@@ -23,8 +23,7 @@ const Form = (props: any) => {
     }, [])
 
     const onSubmit = (data: FormData) => {
-        console.log("ON SUBMIT")
-        if(!data.status)  
+        if (!data.status)
             data.status = userStatus.NEGATIVE
         saveUserData(data)
             .then((data) => props.onSaveData(true)
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: WIDTH - 65,
         height: 50,
-        marginTop: 5,
+        marginTop: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },

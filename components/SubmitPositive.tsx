@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from "react-native"
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Alert } from "react-native"
 import { getUserData } from "../services/userDataStorageService"
 import Loading from "./Loading"
 
@@ -18,6 +18,24 @@ const SubmitPositive = (props: any) => {
         )
     }, [])
 
+    const createAlert = () => {
+        return(
+            Alert.alert(
+                "Send Positive Results",
+                "Are you sure you want to send.......... ADD SOME TEXT!!!?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                  },
+                  { text: "OK", onPress: () => submitPositiveResults() }
+                ],
+                { cancelable: false }
+              )
+        );
+    }
+
     const submitPositiveResults = () => {
         console.log("SEND REQUEST")
         setLoading(true)
@@ -25,14 +43,14 @@ const SubmitPositive = (props: any) => {
 
 
     return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                {loading ? <Loading setLoading={setLoading} /> : [
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            {loading ? <Loading setLoading={setLoading} /> : [
                 <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={styles.label}>HEALTH ID</Text>
                     <Text style={styles.healthId}>{healthId}</Text>
                 </View>,
                 <View style={{ flex: 1, marginBottom: 100, alignItems: 'center', justifyContent: 'center' }}>
-                    <TouchableOpacity onPress={() => submitPositiveResults()}>
+                    <TouchableOpacity onPress={() => createAlert()}>
                         <View style={styles.buttonSave}>
                             <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>SUBMIT</Text>
                         </View>
@@ -43,13 +61,13 @@ const SubmitPositive = (props: any) => {
                         </View>
                     </TouchableOpacity>
                 </View>]}
-            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-                    label: {
-                    marginTop: 10,
+    label: {
+        marginTop: 10,
         marginBottom: 5,
         fontSize: 16,
         fontWeight: 'bold',
@@ -57,11 +75,11 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     healthId: {
-                    fontSize: 40,
+        fontSize: 40,
         fontStyle: 'italic'
     },
     buttonSave: {
-                    backgroundColor: "#0E6EB8",
+        backgroundColor: "#0E6EB8",
         borderWidth: 1,
         borderColor: '#0E6EB8',
         borderRadius: 50,
@@ -72,17 +90,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonCancel: {
-                    borderWidth: 1,
+        borderWidth: 1,
         borderColor: '#0E6EB8',
         borderRadius: 50,
         width: WIDTH - 65,
         height: 50,
-        marginTop: 5,
+        marginTop: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
     btnCancelText: {
-                    fontSize: 20,
+        fontSize: 20,
         color: '#0E6EB8',
         fontWeight: 'bold'
     }

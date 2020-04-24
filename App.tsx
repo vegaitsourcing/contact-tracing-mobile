@@ -2,12 +2,12 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
-import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
+import { getUserData } from './services/userDataStorageService';
 import SubmitPositive from './components/SubmitPositive';
-import {registerForPushNotificationsAsync} from './services/registerForPushNotificationsAsync'
+import { registerForPushNotificationsAsync } from './services/registerForPushNotificationsAsync'
 import { Notifications } from 'expo';
 import { demoCrypto, generateTracingKey } from './services/cryptoService';
-import { getTracingKey, saveTracingKey, saveAppStatus } from './services/tokenStorageService';
+import { getTracingKey, saveTracingKey, saveAppStatus, getAppStatus, removeTracingKey } from './services/tokenStorageService';
 import { AppStatus } from './types/models/appStatus';
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -20,15 +20,13 @@ export default function App() {
 
 
   useEffect(() => {
-    //demoCrypto()
-
-    // removeUserData().then(
-    //   data => {
-    //     setUserSaved(false)
-    //   })
-
     registerForPushNotificationsAsync()
     const notificationSubscription = Notifications.addListener(_handleNotification);
+    getAppStatus().then(
+      data => setTracing(data)
+    ).catch(err => {
+      console.log(err)
+    })
     getUserData().then(
       data => setUserSaved(true)
     ).catch(err => {
@@ -36,7 +34,7 @@ export default function App() {
     })
   }, [])
 
-  const _handleNotification = (notification:any) => {
+  const _handleNotification = (notification: any) => {
     console.log("nije u app");
     const PATTERN = [1000, 2000, 3000];
     // Vibration.vibrate(PATTERN);
@@ -45,24 +43,30 @@ export default function App() {
   };
 
   const startContactTracing = () => {
-    console.log('start');
-    // removeUserData().then(
-    //   data => {
-    //     setUserSaved(false)
-    //   })
-
     var tracingKey = ''
     getTracingKey().then(data => {
-        if(!data) {
-            tracingKey = generateTracingKey()
-            saveTracingKey(tracingKey)
-        } else {
-            tracingKey = data
-        }
-        demoCrypto(tracingKey)
-        saveAppStatus(AppStatus.TRACING)
-    }).catch(err => console.log("Failed setting tracingKey: ",err))
+      if (!data) {
+        tracingKey = generateTracingKey()
+        saveTracingKey(tracingKey)
+      } else {
+        tracingKey = data
+      }
+      demoCrypto(tracingKey)
+      saveAppStatus(AppStatus.TRACING)
+      setTracing(true)
+    }).catch(err => alert("Failed setting tracing key"))
 
+  }
+
+  const stopContactTracing = () => {
+    removeTracingKey().
+      then(data => {
+        saveAppStatus(AppStatus.NOT_TRACING)
+        setTracing(false)
+      })
+      .catch(err => {
+        alert("error")
+      })
   }
 
   const saveFromData = (value: boolean) => {
@@ -76,7 +80,7 @@ export default function App() {
     setUpdateMode(true)
   }
 
-  const createTwoButtonAlert = (value: boolean) => {
+  function createTwoButtonAlert(value: boolean) {
     if (value) {
       Alert.alert(
         "Start Tracing",
@@ -87,7 +91,7 @@ export default function App() {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
           },
-          { text: "OK", onPress: () => setTracing(true) }
+          { text: "OK", onPress: () => startContactTracing() }
         ],
         { cancelable: false }
       );
@@ -101,7 +105,7 @@ export default function App() {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
           },
-          { text: "OK", onPress: () => setTracing(false) }
+          { text: "OK", onPress: () => stopContactTracing() }
         ],
         { cancelable: false }
       );
@@ -109,20 +113,20 @@ export default function App() {
   }
 
   function renderContainer() {
-  return (
+    return (
       <Fragment>
         {userSaved && !updateMode && !submitMode && [
           <UserInfo setUpdateMode={setUpdateMode} setSubmitMode={setSubmitMode} />,
-              <TouchableOpacity onPress={() => onModeChange()}>
-                <View style={styles.updateBtn}>
-                  <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
-                </View>
-              </TouchableOpacity>
-            ]
+          <TouchableOpacity onPress={() => onModeChange()}>
+            <View style={styles.updateBtn}>
+              <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
+            </View>
+          </TouchableOpacity>
+        ]
         }
         {(!userSaved || updateMode) && !submitMode &&
-              <Form onSaveData={saveFromData} updateMode={updateMode} />
-            }
+          <Form onSaveData={saveFromData} updateMode={updateMode} />
+        }
         {userSaved && submitMode && !updateMode &&
           <SubmitPositive setSubmitMode={setSubmitMode} />
         }
@@ -133,21 +137,21 @@ export default function App() {
   function renderBtn() {
     return (
       <Fragment>
-      {userSaved && !updateMode && !submitMode &&
-            <View style={styles.innderBtn}>
+        {userSaved && !updateMode && !submitMode &&
+          <View style={styles.innderBtn}>
             {!tracing ?
-              <TouchableOpacity onPress={() => startContactTracing()}>
+              <TouchableOpacity onPress={() => createTwoButtonAlert(true)}>
                 <View style={styles.trackingBtn}>
                   <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
                 </View>
               </TouchableOpacity>
               :
-              <TouchableOpacity onPress={() => stopContactTracing()}>
+              <TouchableOpacity onPress={() => createTwoButtonAlert(false)}>
                 <View style={styles.trackingBtnStop}>
                   <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>STOP CONTACT TRACING</Text>
-            </View>
+                </View>
               </TouchableOpacity>
-          }
+            }
           </View>
         }
       </Fragment>
@@ -163,11 +167,11 @@ export default function App() {
         <View style={styles.container}>
           <View style={styles.innerLogo}>
             <Image source={require('./assets/logo.jpg')} />
-        </View>
+          </View>
           <View style={styles.innderCont}>
             {renderContainer()}
           </View>
-            {renderBtn()}
+          {renderBtn()}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

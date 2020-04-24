@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { getUserData } from '../services/userDataStorageService';
 import FormData from '../types/models/formData';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
-
-
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -15,7 +13,7 @@ const UserInfo = (props: any) => {
 
   useEffect(() => {
     getUserData().then(
-      data => { console.log('ENTER USER DATA GET'); setUserData(data) }
+      data => { setUserData(data) }
     )
   }, [])
 
@@ -34,7 +32,11 @@ const UserInfo = (props: any) => {
       <View>
         <Text style={styles.infoLabel}>STATUS</Text>
         <View style={styles.status}>
-          <Text style={styles.infoStatus}>Negative</Text>
+          <Text style={styles.infoStatus}>
+            {userData?.status == 0 && 'Negative'}
+            {userData?.status == 1 && 'Waiting Approval'}
+            {userData?.status == 2 && 'Positive'}
+          </Text>
           <TouchableOpacity onPress={() => submitPositiveResults()}>
             <View style={styles.submitPositive}>
               <Text style={styles.submitPositiveText}>SUBMIT POSITIVE</Text>
