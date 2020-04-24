@@ -1,10 +1,11 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
 import SubmitPositive from './components/SubmitPositive';
-
+import {registerForPushNotificationsAsync} from './services/registerForPushNotificationsAsync'
+import { Notifications } from 'expo';
 const { width: WIDTH } = Dimensions.get('window')
 
 export default function App() {
@@ -12,13 +13,24 @@ export default function App() {
   const [updateMode, setUpdateMode] = useState(false)
   const [submitMode, setSubmitMode] = useState(false)
 
+
   useEffect(() => {
+    registerForPushNotificationsAsync()
+    const notificationSubscription = Notifications.addListener(_handleNotification);
     getUserData().then(
       data => setUserSaved(true)
     ).catch(err => {
       console.log(err)
     })
   }, [])
+
+  const _handleNotification = (notification:any) => {
+    console.log("nije u app");
+    const PATTERN = [1000, 2000, 3000];
+    // Vibration.vibrate(PATTERN);
+    alert(notification);
+    console.log(notification);
+  };
 
   const startContactTracing = () => {
     console.log('start');
