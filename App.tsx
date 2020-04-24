@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
@@ -16,6 +16,7 @@ export default function App() {
   const [userSaved, setUserSaved] = useState(false)
   const [updateMode, setUpdateMode] = useState(false)
   const [submitMode, setSubmitMode] = useState(false)
+  const [tracing, setTracing] = useState(false)
 
 
   useEffect(() => {
@@ -75,6 +76,38 @@ export default function App() {
     setUpdateMode(true)
   }
 
+  const createTwoButtonAlert = (value: boolean) => {
+    if (value) {
+      Alert.alert(
+        "Start Tracing",
+        "Are you sure you want to enable tracing contacts?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => setTracing(true) }
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Stop Tracing",
+        "Are you sure you want to stop tracing contacts?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => setTracing(false) }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
   function renderContainer() {
   return (
       <Fragment>
@@ -102,13 +135,21 @@ export default function App() {
       <Fragment>
       {userSaved && !updateMode && !submitMode &&
             <View style={styles.innderBtn}>
+            {!tracing ?
               <TouchableOpacity onPress={() => startContactTracing()}>
                 <View style={styles.trackingBtn}>
                   <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
                 </View>
               </TouchableOpacity>
+              :
+              <TouchableOpacity onPress={() => stopContactTracing()}>
+                <View style={styles.trackingBtnStop}>
+                  <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>STOP CONTACT TRACING</Text>
             </View>
+              </TouchableOpacity>
           }
+          </View>
+        }
       </Fragment>
     );
   }
@@ -167,6 +208,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E6EB8",
     borderWidth: 1,
     borderColor: '#0E6EB8',
+    borderRadius: 50,
+    height: 50,
+    width: WIDTH - 50,
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  trackingBtnStop: {
+    backgroundColor: "#ff0000",
+    borderWidth: 1,
+    borderColor: '#ff0000',
     borderRadius: 50,
     height: 50,
     width: WIDTH - 50,
