@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeed
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
+import { demoCrypto } from './services/cryptoService';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -11,6 +12,7 @@ export default function App() {
   const [updateMode, setUpdateMode] = useState(false)
 
   useEffect(() => {
+    demoCrypto()
     getUserData().then(
       data => setUserSaved(true)
     ).catch(err => {
