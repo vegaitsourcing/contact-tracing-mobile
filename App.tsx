@@ -1,10 +1,10 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { StyleSheet, Text, View, Button, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Keyboard, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Image, Dimensions, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import Form from './components/Form';
 import UserInfo from './components/UserInfo';
 import { getUserData, removeUserData, saveUserData } from './services/userDataStorageService';
 import SubmitPositive from './components/SubmitPositive';
-import {registerForPushNotificationsAsync} from './services/registerForPushNotificationsAsync'
+import { registerForPushNotificationsAsync } from './services/registerForPushNotificationsAsync'
 import { Notifications } from 'expo';
 import { demoCrypto } from './services/cryptoService';
 
@@ -14,6 +14,7 @@ export default function App() {
   const [userSaved, setUserSaved] = useState(false)
   const [updateMode, setUpdateMode] = useState(false)
   const [submitMode, setSubmitMode] = useState(false)
+  const [tracing, setTracing] = useState(false)
 
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function App() {
     })
   }, [])
 
-  const _handleNotification = (notification:any) => {
+  const _handleNotification = (notification: any) => {
     console.log("nije u app");
     const PATTERN = [1000, 2000, 3000];
     // Vibration.vibrate(PATTERN);
@@ -37,10 +38,16 @@ export default function App() {
 
   const startContactTracing = () => {
     console.log('start');
-    removeUserData().then(
-      data => {
-        setUserSaved(false)
-      })
+    createTwoButtonAlert(true)
+    // removeUserData().then(
+    //   data => {
+    //     setUserSaved(false)
+    //   })
+  }
+
+  const stopContactTracing = () => {
+    console.log('stop');
+    createTwoButtonAlert(false);
   }
 
   const saveFromData = (value: boolean) => {
@@ -54,21 +61,53 @@ export default function App() {
     setUpdateMode(true)
   }
 
+  const createTwoButtonAlert = (value: boolean) => {
+    if (value) {
+      Alert.alert(
+        "Start Tracing",
+        "Are you sure you want to enable tracing contacts?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => setTracing(true) }
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Stop Tracing",
+        "Are you sure you want to stop tracing contacts?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => setTracing(false) }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
   function renderContainer() {
-  return (
+    return (
       <Fragment>
         {userSaved && !updateMode && !submitMode && [
           <UserInfo setUpdateMode={setUpdateMode} setSubmitMode={setSubmitMode} />,
-              <TouchableOpacity onPress={() => onModeChange()}>
-                <View style={styles.updateBtn}>
-                  <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
-                </View>
-              </TouchableOpacity>
-            ]
+          <TouchableOpacity onPress={() => onModeChange()}>
+            <View style={styles.updateBtn}>
+              <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>UPDATE INFO</Text>
+            </View>
+          </TouchableOpacity>
+        ]
         }
         {(!userSaved || updateMode) && !submitMode &&
-              <Form onSaveData={saveFromData} updateMode={updateMode} />
-            }
+          <Form onSaveData={saveFromData} updateMode={updateMode} />
+        }
         {userSaved && submitMode && !updateMode &&
           <SubmitPositive setSubmitMode={setSubmitMode} />
         }
@@ -79,15 +118,23 @@ export default function App() {
   function renderBtn() {
     return (
       <Fragment>
-      {userSaved && !updateMode && !submitMode &&
-            <View style={styles.innderBtn}>
+        {userSaved && !updateMode && !submitMode &&
+          <View style={styles.innderBtn}>
+            {!tracing ?
               <TouchableOpacity onPress={() => startContactTracing()}>
                 <View style={styles.trackingBtn}>
                   <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>START CONTACT TRACING</Text>
                 </View>
               </TouchableOpacity>
-            </View>
-          }
+              :
+              <TouchableOpacity onPress={() => stopContactTracing()}>
+                <View style={styles.trackingBtnStop}>
+                  <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>STOP CONTACT TRACING</Text>
+                </View>
+              </TouchableOpacity>
+            }
+          </View>
+        }
       </Fragment>
     );
   }
@@ -101,11 +148,11 @@ export default function App() {
         <View style={styles.container}>
           <View style={styles.innerLogo}>
             <Image source={require('./assets/logo.jpg')} />
-        </View>
+          </View>
           <View style={styles.innderCont}>
             {renderContainer()}
           </View>
-            {renderBtn()}
+          {renderBtn()}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -146,6 +193,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0E6EB8",
     borderWidth: 1,
     borderColor: '#0E6EB8',
+    borderRadius: 50,
+    height: 50,
+    width: WIDTH - 50,
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  trackingBtnStop: {
+    backgroundColor: "#ff0000",
+    borderWidth: 1,
+    borderColor: '#ff0000',
     borderRadius: 50,
     height: 50,
     width: WIDTH - 50,
