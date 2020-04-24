@@ -6,7 +6,9 @@ import { getUserData, removeUserData, saveUserData } from './services/userDataSt
 import SubmitPositive from './components/SubmitPositive';
 import {registerForPushNotificationsAsync} from './services/registerForPushNotificationsAsync'
 import { Notifications } from 'expo';
-import { demoCrypto } from './services/cryptoService';
+import { demoCrypto, generateTracingKey } from './services/cryptoService';
+import { getTracingKey, saveTracingKey, saveAppStatus } from './services/tokenStorageService';
+import { AppStatus } from './types/models/appStatus';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -17,7 +19,13 @@ export default function App() {
 
 
   useEffect(() => {
-    demoCrypto()
+    //demoCrypto()
+
+    // removeUserData().then(
+    //   data => {
+    //     setUserSaved(false)
+    //   })
+
     registerForPushNotificationsAsync()
     const notificationSubscription = Notifications.addListener(_handleNotification);
     getUserData().then(
@@ -37,10 +45,23 @@ export default function App() {
 
   const startContactTracing = () => {
     console.log('start');
-    removeUserData().then(
-      data => {
-        setUserSaved(false)
-      })
+    // removeUserData().then(
+    //   data => {
+    //     setUserSaved(false)
+    //   })
+
+    var tracingKey = ''
+    getTracingKey().then(data => {
+        if(!data) {
+            tracingKey = generateTracingKey()
+            saveTracingKey(tracingKey)
+        } else {
+            tracingKey = data
+        }
+        demoCrypto(tracingKey)
+        saveAppStatus(AppStatus.TRACING)
+    }).catch(err => console.log("Failed setting tracingKey: ",err))
+
   }
 
   const saveFromData = (value: boolean) => {

@@ -1,11 +1,23 @@
+import { getTracingKey, saveTracingKey } from "./tokenStorageService";
 
 const Crypto = require('crypto');
 var HKDF = require('hkdf')
 
-export const demoCrypto = () => {
+export const demoCrypto = async (tracingKey: string) => {
+
+    // var tracingKey = ''
+    // await getTracingKey().then(data => {
+    //     if(!data) {
+    //         tracingKey = generateTracingKey()
+    //         saveTracingKey(tracingKey)
+    //     } else {
+    //         tracingKey = data
+    //     }
+    // }
+    // )
 
     console.log("*************")
-    const tracingKey = Crypto.lib.WordArray.random(16).toString()
+    //const tracingKey = Crypto.lib.WordArray.random(16).toString()
     console.log('TracingKey: ', tracingKey)
 
     const secondsSinceEpoch = Math.round(Date.now() / 1000);
@@ -49,4 +61,10 @@ const checkMatch = (dailyTracingKey, rpi) => {
             return true;
     }
     return false;
+}
+
+export const generateTracingKey = () => {
+    const tracingKey = Crypto.lib.WordArray.random(16).toString()
+    console.log('TracingKey: ', tracingKey)
+    return tracingKey
 }

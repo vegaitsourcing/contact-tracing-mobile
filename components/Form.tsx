@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { Text, View, TextInput, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from "react-native"
 import { useForm, Controller } from 'react-hook-form'
-import FormData from '../types/models/formData'
+import FormData, { userStatus } from '../types/models/formData'
 import { saveUserData, getUserData } from "../services/userDataStorageService"
 
 
@@ -22,8 +22,10 @@ const Form = (props: any) => {
         }
     }, [])
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (data: FormData) => {
         console.log("ON SUBMIT")
+        if(!data.status)  
+            data.status = userStatus.NEGATIVE
         saveUserData(data)
             .then((data) => props.onSaveData(true)
             ).catch((err) => console.log("Error saving data"))
