@@ -2,36 +2,8 @@ import {AsyncStorage} from "react-native";
 import { AppStatus } from "../types/models/appStatus";
 
 
-const notifToken = 'notifToken';
 const tracingKey = 'tracingKey';
 const appStatus = 'appStatus';
-
-export const getNotifToken = () => {
-    return new Promise<any>((resolve,reject) => 
-        AsyncStorage.getItem(notifToken)
-            .then(data =>  resolve(data))
-            .catch(err => reject(err))
-    )
-}
-
-export const saveNotifToken = (data: string) => {
-    return new Promise<any>((resolve,reject) => 
-        AsyncStorage.setItem(notifToken,data)
-            .then(data =>  resolve(data))
-            .catch(err => reject(err))
-    )
-}
-
-export const removeNotifToken = () => {
-    return new Promise<any>((resolve,reject) => 
-        AsyncStorage.removeItem(notifToken)
-            .then(data =>  resolve(data))
-            .catch(err => reject(err))
-    )
-}
-
-
-
 
 export const getTracingKey = () => {
     return new Promise<any>((resolve,reject) => 

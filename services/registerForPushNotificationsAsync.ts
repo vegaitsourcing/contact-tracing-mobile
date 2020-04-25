@@ -3,7 +3,6 @@ import {Platform } from 'react-native';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
-import { getNotifToken, saveNotifToken } from './tokenStorageService';
 
 export const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -17,15 +16,7 @@ export const registerForPushNotificationsAsync = async () => {
         alert('Failed to get push token for push notification!');
         return;
       }
-      getNotifToken().then(async data => {
-        if(!data) {
-          const token = await Notifications.getExpoPushTokenAsync();
-          console.log(token);
-          saveNotifToken(token).then( data =>
-            console.log('Saved user token')
-          ).catch(err => console.log('Error saving user token: ',err))
-        }
-      })
+      
       
     } else {
       alert('Must use physical device for Push Notifications');
