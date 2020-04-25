@@ -4,6 +4,7 @@ import { AppStatus } from "../types/models/appStatus";
 
 const tracingKey = 'tracingKey';
 const appStatus = 'appStatus';
+const lastFetchDate = 'lastFetchDate';
 
 export const getTracingKey = () => {
     return new Promise<any>((resolve,reject) => 
@@ -50,6 +51,37 @@ export const saveAppStatus = (data: AppStatus) => {
 export const removeAppStatus = () => {
     return new Promise<any>((resolve,reject) => 
         AsyncStorage.removeItem(appStatus)
+            .then(data =>  resolve(data))
+            .catch(err => reject(err))
+    )
+}
+
+
+
+export const getFetchDate = () => {
+    return new Promise<Date>((resolve,reject) => 
+        AsyncStorage.getItem(lastFetchDate)
+            .then(data => {
+                if(data)
+                    resolve(new Date(Date.parse(data)))
+                else 
+                    reject("Cannot parse date from storrage")
+            })
+            .catch(err => reject(err))
+    )
+}
+
+export const saveFetchDate = (data: Date) => {
+    return new Promise<any>((resolve,reject) => 
+        AsyncStorage.setItem(lastFetchDate,data.toString())
+            .then(data =>  resolve(data))
+            .catch(err => reject(err))
+    )
+}
+
+export const removeFetchDate = () => {
+    return new Promise<any>((resolve,reject) => 
+        AsyncStorage.removeItem(lastFetchDate)
             .then(data =>  resolve(data))
             .catch(err => reject(err))
     )
