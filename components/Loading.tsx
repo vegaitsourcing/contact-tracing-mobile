@@ -2,14 +2,7 @@ import React, { useEffect } from "react"
 import { StyleSheet, View, Text } from "react-native"
 import AnimatedLoader from "react-native-animated-loader";
 
-const Loading = (props: any) => {
-
-    useEffect(() => {
-        setTimeout(function () {
-            props.setLoading(false)
-        }, 5000)
-    }, [])
-
+const Loading = () => {
     return (
         <View style={styles.loading}>
             <AnimatedLoader
@@ -19,13 +12,6 @@ const Loading = (props: any) => {
                 animationStyle={styles.lottie}
                 speed={1}
             />
-            {/* <AnimatedLoader
-                visible={true}
-                overlayColor="rgba(255,255,255,0.75)"
-                source={require("../assets/success.json")}
-                animationStyle={styles.lottie}
-                speed={1}
-            /> */}
             <Text style={styles.loadingText}>Loading...</Text>
         </View>
     )

@@ -1,18 +1,39 @@
-import React, { useState } from "react"
-import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Alert, ShadowPropTypesIOS } from "react-native"
+import React, { useState, useEffect, useRef } from "react"
+import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Alert, Modal, TouchableHighlight } from "react-native"
 import Loading from "./Loading"
+import ModalPopup from "./ModalPopup"
 
 const { width: WIDTH } = Dimensions.get('window')
 
-const CheckContacts = (props:any) => {
+const CheckContacts = (props: any) => {
 
     const [loading, setLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const checkContacts = () => {
-        setLoading(true)
+    const prevCount = usePrevious(loading)
+    useEffect(() => {
+        if (!loading && prevCount) {
+            setModalVisible(true)
+        }
+    }, [loading])
+
+    function usePrevious(value: any) {
+        const ref = useRef();
+        useEffect(() => {
+            ref.current = value;
+        });
+        return ref.current;
     }
 
-    function createAlert() {
+    const checkContacts = () => {
+        // ovde pozvati metodu za getDiagnosis
+        setLoading(true)
+        setTimeout(function () {
+            setLoading(false);
+        }, 3000)
+    }
+
+    function createAlertCheck() {
         return (
             Alert.alert(
                 "Check Contacts",
@@ -35,23 +56,29 @@ const CheckContacts = (props:any) => {
             <View style={styles.innerLogo}>
                 <Image source={require('../assets/logo.jpg')} />
             </View>
+            <ModalPopup visible={modalVisible} setVisible={setModalVisible} />
             {loading ?
-                <Loading setLoading={setLoading} />
+                <Loading />
                 : [
                     <View style={styles.innerCont}>
-                        <Text style={styles.text}>SMISLITI TEXT</Text>
+                        {!modalVisible &&
+                            <Text style={styles.text}>
+                                By clicking the check button you can find out if you have recently been in contact with an infected person</Text>
+                        }
                     </View>,
                     <View style={styles.innerBtn}>
-                        <TouchableOpacity onPress={() => createAlert()}>
-                            <View style={styles.trackingBtn}>
-                                <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>CHECK</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
-                            <View style={styles.backBtn}>
-                                <Text style={{ fontSize: 20, color: '#0E6EB8', fontWeight: 'bold' }}>BACK</Text>
-                            </View>
-                        </TouchableOpacity>
+                        {!modalVisible &&
+                            <TouchableOpacity onPress={() => createAlertCheck()}>
+                                <View style={styles.btn}>
+                                    <Text style={{ ...styles.btnText, color: '#0E6EB8' }}>CHECK</Text>
+                                </View>
+                            </TouchableOpacity>}
+                        {!modalVisible &&
+                            <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+                                <View style={{ ...styles.btn, backgroundColor: "#0E6EB8" }}>
+                                    <Text style={styles.btnText}>BACK</Text>
+                                </View>
+                            </TouchableOpacity>}
                     </View>
                 ]
 
@@ -67,12 +94,12 @@ const styles = StyleSheet.create({
     innerLogo: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-end",
     },
     innerCont: {
         flex: 2,
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         marginTop: 50,
     },
     text: {
@@ -85,11 +112,11 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     innerBtn: {
-        flex: 1,
+        flex: 2,
         alignItems: "center",
         justifyContent: "center"
     },
-    backBtn: {
+    btn: {
         borderWidth: 1,
         borderColor: '#0E6EB8',
         borderRadius: 50,
@@ -98,17 +125,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
-      },
-    trackingBtn: {
-        backgroundColor: "#0E6EB8",
-        borderWidth: 1,
-        borderColor: '#0E6EB8',
-        borderRadius: 50,
-        height: 50,
-        width: WIDTH - 50,
-        marginTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
+    },
+    btnText: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold'
     }
 });
 
