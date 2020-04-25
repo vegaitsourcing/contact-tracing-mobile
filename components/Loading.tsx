@@ -26,7 +26,7 @@ const Loading = (props: any) => {
                 animationStyle={styles.lottie}
                 speed={1}
             /> */}
-            <Text style={styles.loadingText}>Sending Data...</Text>
+            <Text style={styles.loadingText}>Loading...</Text>
         </View>
     )
 }
