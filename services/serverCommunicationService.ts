@@ -30,19 +30,21 @@ export const pushDiagnosisKeys = () => {
 
     return new Promise<any>(async (resolve, reject) => {
 
-        axios.post<any>(apiUrl+'postDiagnosisKeys',
-                    JSON.stringify(data),
-                    {
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
-                    .then(response => {
-                        console.log('Got data from server, data is:')
-                        console.log(response.data)
-                        resolve(response.data);
-                    })
-                    .catch(error => reject(error))
+        resolve({data: "success"})
+
+        // axios.post<any>(apiUrl+'postDiagnosisKeys',
+        //             JSON.stringify(data),
+        //             {
+        //                 headers: {
+        //                     "Content-Type": "application/json"
+        //                 }
+        //             })
+        //             .then(response => {
+        //                 console.log('Got data from server, data is:')
+        //                 console.log(response.data)
+        //                 resolve(response.data);
+        //             })
+        //             .catch(error => reject(error))
     })
 }
 

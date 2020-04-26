@@ -31,7 +31,9 @@ const CheckContacts = (props: any) => {
         setLoading(true)
         fetchDiagnosisKeys().then( res => {
             console.log("Got data: ", res.data)
-            setLoading(false);
+            setTimeout(function () {
+                setLoading(false);
+            }, 3000)
         }).catch(err => {
             console.log("Error fetching data: ",err)
             //setLoading(false)

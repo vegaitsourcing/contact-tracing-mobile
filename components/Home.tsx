@@ -22,11 +22,13 @@ const Home = (props: any) => {
 
     const sendDailyKeys = () => {
         // ovde pozvati metodu za postDiagnosis
-        pushDiagnosisKeys()
         setLoading(true)
-        setTimeout(function () {
-            setLoading(false);
-        }, 3000)
+          pushDiagnosisKeys().then(() => {
+            setTimeout(function () {
+              setLoading(false);
+          }, 3000)
+        }).catch(err => console.log("Error fetching keys: ", err))
+        
     }
 
     const startContactTracing = () => {
@@ -116,7 +118,7 @@ const Home = (props: any) => {
             {loading ? <Loading /> : [
                 <View style={styles.innerCont}>
                     <Text style={styles.title}>COVID Contact Notifier</Text>
-                    <Text style={styles.text}>A mobile app that helps people (with their consent) be notified if they were in contact with a person was diagnosed with COVID-19.</Text>
+                    <Text style={styles.text}>A mobile app that helps people (with their consent) be notified if they were in contact with a person that was diagnosed with COVID-19.</Text>
                 </View>,
                 <View style={styles.innerBtn}>
                     {renderBtn()}
