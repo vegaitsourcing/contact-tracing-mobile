@@ -6,6 +6,8 @@ A cross-platform mobile application, written in React Native, that serves to hel
 
 Communicates with the Diagnosis Server [contact-tracing-backend](https://github.com/vegaitsourcing/contact-tracing-backend) by using the [following API](https://github.com/vegaitsourcing/contact-tracing-backend/wiki/API-Documentation)
 
+Based on [the Contact Tracing API currently being developed by Apple and Google](https://www.blog.google/inside-google/company-announcements/apple-and-google-partner-covid-19-contact-tracing-technology/)
+
 ## How to run
 
     #Make sure you have NodeJS and npm installed on your environment:
@@ -30,6 +32,3 @@ Communicates with the Diagnosis Server [contact-tracing-backend](https://github.
     iOS: Scan the QR code directly from the phone's Camera app and run the app when prompted 
     
     
-
-
-
