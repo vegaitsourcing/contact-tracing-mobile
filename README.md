@@ -14,7 +14,7 @@ Documentation:
     #Make sure you have expo-cli installed: 
     npm install --global expo-cli
     
-    #Make sure you have Expo app installed on your phone or emulator (iOS/Android). 
+    #Make sure you have Expo app installed on your phone device or emulator (iOS/Android). 
     You can download the Expo app from the respective app store.
     
     git clone https://github.com/vegaitsourcing/contact-tracing-mobile.git
