@@ -64,7 +64,8 @@ const CheckContacts = (props: any) => {
     return (
         <View style={styles.container}>
             <View style={styles.innerLogo}>
-                <Image source={require('../assets/logo.jpg')} />
+                <Image style={styles.vegaLogo} source={require('../assets/VegaIT_Logo.png')} />
+                <Image style={{marginBottom:50}} source={require('../assets/logo.jpg')} />
             </View>
             <ModalPopup visible={modalVisible} setVisible={setModalVisible} />
             {loading ?
@@ -102,14 +103,19 @@ const styles = StyleSheet.create({
         flex: 1
     },
     innerLogo: {
-        flex: 1,
+        flex: 2,
         alignItems: "center",
         justifyContent: "flex-end",
+    },
+    vegaLogo: {
+        position:'absolute',
+        top:50,
+        left:20
     },
     innerCont: {
         flex: 2,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         marginTop: 50,
     },
     text: {
