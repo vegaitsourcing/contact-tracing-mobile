@@ -4,7 +4,7 @@
 
 A cross-platform mobile application, written in React Native, that serves to help people (with their consent) be notified if they were in contact with a person that was diagnosed with COVID-19.
 
-Communicates with the Diagnosis Server [contact-tracing-backend](https://github.com/vegaitsourcing/contact-tracing-backend)
+Communicates with the Diagnosis Server [contact-tracing-backend](https://github.com/vegaitsourcing/contact-tracing-backend) by using the [following API](https://github.com/vegaitsourcing/contact-tracing-backend/wiki/API-Documentation)
 
 ## How to run
 
