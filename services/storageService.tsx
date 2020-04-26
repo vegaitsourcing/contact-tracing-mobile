@@ -35,7 +35,7 @@ export const removeTracingKey = () => {
 export const getAppStatus = () => {
     return new Promise<any>((resolve,reject) => 
         AsyncStorage.getItem(appStatus)
-            .then(data =>  resolve(data))
+            .then(data =>  resolve(data == "1"))
             .catch(err => reject(err))
     )
 }
