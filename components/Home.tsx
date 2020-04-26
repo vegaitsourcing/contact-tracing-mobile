@@ -108,7 +108,7 @@ const Home = (props: any) => {
         <View style={styles.container}>
             <View style={styles.innerLogo}>
                 <Image style={styles.vegaLogo} source={require('../assets/VegaIT_Logo.png')} />
-                <Image style={{marginBottom:50}} source={require('../assets/logo.jpg')} />
+                <Image style={{marginBottom:30}} source={require('../assets/logo.jpg')} />
             </View>
             {loading ? <Loading /> : [
                 <View style={styles.innerCont}>
@@ -134,8 +134,7 @@ const styles = StyleSheet.create({
     },
     vegaLogo: {
         position:'absolute',
-        top:50,
-        left:20
+        top:60,
     },
     innerCont: {
         flex: 2,

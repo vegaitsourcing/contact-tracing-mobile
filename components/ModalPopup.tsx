@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, Modal, StyleSheet, Dimensions, Linking } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const { width: WIDTH } = Dimensions.get('window')
 

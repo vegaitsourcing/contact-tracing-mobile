@@ -27,7 +27,6 @@ const CheckContacts = (props: any) => {
     }
 
     const checkContacts = () => {
-        // ovde pozvati metodu za getDiagnosis       
         setLoading(true)
         fetchDiagnosisKeys().then( res => {
             console.log("Got data: ", res.data)
@@ -36,11 +35,7 @@ const CheckContacts = (props: any) => {
             }, 3000)
         }).catch(err => {
             console.log("Error fetching data: ",err)
-            //setLoading(false)
         })
-        // setTimeout(function () {
-        //     setLoading(false);
-        // }, 3000)
     }
 
     function createAlertCheck() {
@@ -65,7 +60,7 @@ const CheckContacts = (props: any) => {
         <View style={styles.container}>
             <View style={styles.innerLogo}>
                 <Image style={styles.vegaLogo} source={require('../assets/VegaIT_Logo.png')} />
-                <Image style={{marginBottom:50}} source={require('../assets/logo.jpg')} />
+                <Image style={{marginBottom:30}} source={require('../assets/logo.jpg')} />
             </View>
             <ModalPopup visible={modalVisible} setVisible={setModalVisible} />
             {loading ?
@@ -109,8 +104,7 @@ const styles = StyleSheet.create({
     },
     vegaLogo: {
         position:'absolute',
-        top:50,
-        left:20
+        top:60,
     },
     innerCont: {
         flex: 2,
