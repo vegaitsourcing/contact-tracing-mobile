@@ -30,6 +30,9 @@ Communicates with the Diagnosis Server [contact-tracing-backend](https://github.
     iOS: Scan the QR code directly from the phone's Camera app and run the app when prompted 
     
     
+Based on [the Contact Tracing API currently being developed by Apple and Google](https://www.blog.google/inside-google/company-announcements/apple-and-google-partner-covid-19-contact-tracing-technology/)
+    
+    
 
 
 
