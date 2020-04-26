@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         height: 100
     },
     loading: {
-        flex: 1,
+        flex: 2,
         alignItems: 'center',
         justifyContent: 'center'
     },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { StyleSheet, Text, View, Alert, Image, Dimensions, TouchableOpacity } from 'react-native';
-import { saveAppStatus, getAppStatus, removeTracingKey } from '../services/storageService';
+import { saveAppStatus, getAppStatus } from '../services/storageService';
 import { AppStatus } from '../types/models/appStatus';
 import Loading from './Loading';
 import { pushDiagnosisKeys } from '../services/serverCommunicationService';
@@ -14,21 +14,22 @@ const Home = (props: any) => {
 
     useEffect(() => {
         getAppStatus().then(
-            data => setTracing(data)
+            data => {
+                setTracing(data)
+            }
         ).catch(err => {
             console.log(err)
         })
     }, [])
 
     const sendDailyKeys = () => {
-        // ovde pozvati metodu za postDiagnosis
         setLoading(true)
-          pushDiagnosisKeys().then(() => {
+        pushDiagnosisKeys().then(() => {
             setTimeout(function () {
-              setLoading(false);
-          }, 3000)
+                setLoading(false);
+            }, 3000)
         }).catch(err => console.log("Error fetching keys: ", err))
-        
+
     }
 
     const startContactTracing = () => {
@@ -37,16 +38,9 @@ const Home = (props: any) => {
     }
 
     const stopContactTracing = () => {
-        removeTracingKey().
-            then(data => {
-                saveAppStatus(AppStatus.NOT_TRACING)
-                setTracing(false)
-            })
-            .catch(err => {
-                alert("error")
-            })
+        saveAppStatus(AppStatus.NOT_TRACING)
+        setTracing(false)
     }
-
 
     function createTwoButtonAlert(value: boolean) {
         if (value) {
@@ -93,16 +87,16 @@ const Home = (props: any) => {
                         <Text style={styles.btnText}>SEND DAILY KEYS</Text>
                     </View>
                 </TouchableOpacity>
-                {!tracing ?
-                    <TouchableOpacity onPress={() => createTwoButtonAlert(true)}>
-                        <View style={{ ...styles.btn, backgroundColor: "#0E6EB8" }}>
-                            <Text style={styles.btnText}>START CONTACT TRACING</Text>
-                        </View>
-                    </TouchableOpacity>
-                    :
+                {tracing ?
                     <TouchableOpacity onPress={() => createTwoButtonAlert(false)}>
                         <View style={{ ...styles.btn, backgroundColor: "#ff0000" }}>
                             <Text style={styles.btnText}>STOP CONTACT TRACING</Text>
+                        </View>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={() => createTwoButtonAlert(true)}>
+                        <View style={{ ...styles.btn, backgroundColor: "#0E6EB8" }}>
+                            <Text style={styles.btnText}>START CONTACT TRACING</Text>
                         </View>
                     </TouchableOpacity>
                 }
