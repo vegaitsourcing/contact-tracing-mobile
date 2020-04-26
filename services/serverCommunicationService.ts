@@ -1,26 +1,24 @@
 import axios from 'axios';
 import DiagnosisKey from '../types/models/diagnosisKey';
 
-const apiUrl = ''
+const apiUrl = 'http://euvscovid.sitesstage.com/api/v1/DiagnosisKey'
 
 export const fetchDiagnosisKeys = () => {
     
     return new Promise<any>(async (resolve, reject) => {
 
-        resolve({data:"MOCK"})
-
-        // axios.get<any>(apiUrl+'getDiagnosisKeys',
-        //             {
-        //                 headers: {
-        //                     "Content-Type": "application/json"
-        //                 }
-        //             })
-        //             .then(response => {
-        //                 console.log('Got data from server, data is:')
-        //                 console.log(response.data)
-        //                 resolve(response.data);
-        //             })
-        //             .catch(error => reject(error))
+        axios.get<any>(apiUrl,
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => {
+                        console.log('Got data from server, data is:')
+                        console.log(response.data)
+                        resolve(response.data);
+                    })
+                    .catch(error => reject(error))
     })
 }
 
@@ -30,21 +28,19 @@ export const pushDiagnosisKeys = () => {
 
     return new Promise<any>(async (resolve, reject) => {
 
-        resolve({data: "success"})
-
-        // axios.post<any>(apiUrl+'postDiagnosisKeys',
-        //             JSON.stringify(data),
-        //             {
-        //                 headers: {
-        //                     "Content-Type": "application/json"
-        //                 }
-        //             })
-        //             .then(response => {
-        //                 console.log('Got data from server, data is:')
-        //                 console.log(response.data)
-        //                 resolve(response.data);
-        //             })
-        //             .catch(error => reject(error))
+        axios.post<any>(apiUrl,
+                    JSON.stringify(data),
+                    {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => {
+                        console.log('Got data from server, data is:')
+                        console.log(response.data)
+                        resolve(response.data);
+                    })
+                    .catch(error => reject(error))
     })
 }
 
