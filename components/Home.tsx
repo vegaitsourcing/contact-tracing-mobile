@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Alert, Image, Dimensions, TouchableOpacity } fr
 import { saveAppStatus, getAppStatus, removeTracingKey } from '../services/storageService';
 import { AppStatus } from '../types/models/appStatus';
 import Loading from './Loading';
+import { pushDiagnosisKeys } from '../services/serverCommunicationService';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -21,6 +22,7 @@ const Home = (props: any) => {
 
     const sendDailyKeys = () => {
         // ovde pozvati metodu za postDiagnosis
+        pushDiagnosisKeys()
         setLoading(true)
         setTimeout(function () {
             setLoading(false);

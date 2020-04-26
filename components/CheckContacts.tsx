@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity, Alert, Modal, TouchableHighlight } from "react-native"
 import Loading from "./Loading"
 import ModalPopup from "./ModalPopup"
+import { fetchDiagnosisKeys } from "../services/serverCommunicationService"
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -26,11 +27,18 @@ const CheckContacts = (props: any) => {
     }
 
     const checkContacts = () => {
-        // ovde pozvati metodu za getDiagnosis
+        // ovde pozvati metodu za getDiagnosis       
         setLoading(true)
-        setTimeout(function () {
+        fetchDiagnosisKeys().then( res => {
+            console.log("Got data: ", res.data)
             setLoading(false);
-        }, 3000)
+        }).catch(err => {
+            console.log("Error fetching data: ",err)
+            //setLoading(false)
+        })
+        // setTimeout(function () {
+        //     setLoading(false);
+        // }, 3000)
     }
 
     function createAlertCheck() {

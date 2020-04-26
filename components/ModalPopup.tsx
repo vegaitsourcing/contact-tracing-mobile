@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, Modal, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableHighlight, Modal, StyleSheet, Dimensions, Linking } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -15,7 +16,11 @@ const ModalPopup = (props: any) => {
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>WARNING!</Text>
-                    <Text style={styles.modalText}>You have been near infected person!</Text>
+                    <Text style={styles.modalText}>
+                        You have been near infected person! {"\n"}
+                        Please contact the official health authority of your area and follow the instructions provided. {"\n"}
+                        Follow <Text style={{color: "#0000FF"}} onPress={() => Linking.openURL('https://www.who.int/news-room/q-a-detail/q-a-coronaviruses')}>this link</Text> to get more details about the diesase.
+                    </Text>
                     <TouchableHighlight
                         style={styles.openButton}
                         onPress={() => {
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         width: WIDTH - 55,
-        height: 300,
+        height: 380,
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
